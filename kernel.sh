@@ -65,16 +65,25 @@ download_toolchain() {
     log_info "Downloading toolchains..."
     cd "$TOOLCHAIN_DIR"
     
-    wget -q -O proton-clang.tar.xz "$CLANG_URL"
+    if ! wget -q -O proton-clang.tar.xz "$CLANG_URL"; then
+        log_error "Failed to download clang toolchain"
+        exit 1
+    fi
     tar -xf proton-clang.tar.xz
     rm proton-clang.tar.xz
     
-    wget -q -O gcc-aarch64.tar.gz "$GCC_AARCH64_URL"
+    if ! wget -q -O gcc-aarch64.tar.gz "$GCC_AARCH64_URL"; then
+        log_error "Failed to download GCC AArch64 toolchain"
+        exit 1
+    fi
     tar -xf gcc-aarch64.tar.gz
     mv android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9-lineage-19.1 gcc-aarch64
     rm gcc-aarch64.tar.gz
     
-    wget -q -O gcc-arm.tar.gz "$GCC_ARM_URL"
+    if ! wget -q -O gcc-arm.tar.gz "$GCC_ARM_URL"; then
+        log_error "Failed to download GCC ARM32 toolchain"
+        exit 1
+    fi
     tar -xf gcc-arm.tar.gz
     mv android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9-lineage-19.1 gcc-arm
     rm gcc-arm.tar.gz
