@@ -52,7 +52,7 @@ log_error() {
 download_file() {
     local url=$1
     local dest=$2
-    local attempts=3
+    local attempts=${3:-3}
     local count=0
 
     until wget -q -O "$dest" "$url"; do
@@ -83,16 +83,16 @@ download_toolchain() {
     log_info "Downloading toolchains..."
     cd "$TOOLCHAIN_DIR"
     
-    download_file "$CLANG_URL" proton-clang.tar.xz || return 1
+    download_file "$CLANG_URL" proton-clang.tar.xz 5 || return 1
     tar -xf proton-clang.tar.xz
     rm proton-clang.tar.xz
     
-    download_file "$GCC_AARCH64_URL" gcc-aarch64.tar.gz || return 1
+    download_file "$GCC_AARCH64_URL" gcc-aarch64.tar.gz 5 || return 1
     tar -xf gcc-aarch64.tar.gz
     mv android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9-lineage-19.1 gcc-aarch64
     rm gcc-aarch64.tar.gz
     
-    download_file "$GCC_ARM_URL" gcc-arm.tar.gz || return 1
+    download_file "$GCC_ARM_URL" gcc-arm.tar.gz 5 || return 1
     tar -xf gcc-arm.tar.gz
     mv android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9-lineage-19.1 gcc-arm
     rm gcc-arm.tar.gz
